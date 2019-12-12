@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AmazingToDoApp.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -30,6 +31,9 @@ namespace AmazingToDoApp
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddDbContext<AmazingToDoAppContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("AmazingToDoAppContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
