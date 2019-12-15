@@ -27,11 +27,11 @@ namespace AmazingToDoApp.Controllers
             return list;
         }
 
-        // PUT: api/ToDoes/5
+        // PUT: api/TaskItems/5/PutToDo
         [HttpPut("{id}/[action]")]
-        public async Task<IActionResult> PutToDo([FromBody] TaskJson doObject)
+        public async Task<IActionResult> PutTaskItem([FromBody] TaskJson doObject)
         {
-            if (doObject.id != doObject.task.Id)
+            if (doObject.id != doObject.task.ID)
             {
                 return BadRequest();
             }
@@ -66,6 +66,6 @@ namespace AmazingToDoApp.Controllers
     public class TaskJson
     {
         public int id { get; set; }
-        public Task task { get; set; }
+        public TaskItem task { get; set; }
     }
 }
