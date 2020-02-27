@@ -19,7 +19,7 @@ namespace AmazingToDoApp.Controllers
             _context = context;
         }
 
-        // GET: api/TaskItems
+        // GET: api/TaskItems/GetItems
         [HttpGet("[action]")]
         public IEnumerable<TaskItem> GetItems()
         {
@@ -27,7 +27,7 @@ namespace AmazingToDoApp.Controllers
             return list;
         }
 
-        // PUT: api/TaskItems/5/PutToDo
+        // PUT: api/TaskItems/5/PutTaskItem
         [HttpPut("{id}/[action]")]
         public async Task<IActionResult> PutTaskItem([FromBody] TaskJson doObject)
         {
@@ -56,6 +56,29 @@ namespace AmazingToDoApp.Controllers
 
             return NoContent();
         }
+
+        //TODO TEST THIS FEATURE!! THIS HAS NOT BEEN TESTED!!
+        //PUT api/TaskItems/AddNewTask
+        [HttpPut("[action]")]
+        public async Task<IActionResult> AddNewTask([FromBody] TaskJson doObject)
+        {
+            if(doObject.task.TaskName == null)
+            {
+                return BadRequest();
+            }
+            //DONE linq code to add new
+            _context.Add(doObject.task);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            return NoContent();
+        }
+
 
         private bool TaskExists(int id)
         {
