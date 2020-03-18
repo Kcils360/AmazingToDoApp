@@ -58,16 +58,21 @@ namespace AmazingToDoApp.Controllers
         }
 
         //TODO TEST THIS FEATURE!! THIS HAS NOT BEEN TESTED!!
-        //PUT api/TaskItems/AddNewTask
+        //PUT api/TaskItems/NewTaskItem
         [HttpPut("[action]")]
-        public async Task<IActionResult> AddNewTask([FromBody] TaskJson doObject)
+        public async Task<IActionResult> NewTaskItem([FromBody] NewJsonTask doObject)
         {
-            if(doObject.task.TaskName == null)
+            if(doObject.name == null)
             {
                 return BadRequest();
             }
             //DONE linq code to add new
-            _context.Add(doObject.task);
+            TaskItem newTask = new TaskItem();
+            newTask.TaskName = doObject.name;
+            newTask.TaskDescription = doObject.desc;
+            newTask.IsDone = false;
+            
+            _context.Add(newTask);
             try
             {
                 await _context.SaveChangesAsync();
@@ -76,7 +81,7 @@ namespace AmazingToDoApp.Controllers
             {
                 return BadRequest();
             }
-            return NoContent();
+            return Ok(newTask.ID);
         }
 
 
@@ -90,5 +95,11 @@ namespace AmazingToDoApp.Controllers
     {
         public int id { get; set; }
         public TaskItem task { get; set; }
+    }
+
+    public class NewJsonTask
+    {
+        public string name { get; set; }
+        public string desc { get; set; }
     }
 }

@@ -6,14 +6,17 @@ export class Home extends Component {
     constructor(props) {
         super(props);
         this.setDone = this.setDone.bind(this);
+        this.showNewTaskText = this.showNewTaskText.bind(this);
+        this.hideNewTaskText = this.hideNewTaskText.bind(this);
         this.state = { tasks: [], loading: true };
-
         fetch('api/TaskItems/GetItems')
             .then(response => response.json())
             .then(data => {
                 this.setState({ tasks: data, loading: false });
             });
     }
+
+   
 
     setDone(task) {
         this.setState(this.state.tasks.map(idx => idx.id === task.id ? idx.isDone = true : idx.isDone = idx.isDone));
@@ -26,6 +29,58 @@ export class Home extends Component {
             },
             body: JSON.stringify({ id: task.id, task: task })
         })
+        
+    }
+
+    saveNewTask() {
+        let name = document.getElementById("1").value;
+        let desc = document.getElementById("2").value;
+
+        fetch('api/TaskItems/NewTaskItem', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({name: name, desc: desc})
+        })
+            .then(id => {
+                let newTask = { id: id, taskName: name, taskDescription: desc, isDone: false }
+                this.setState(() => this.state.tasks.push(newTask));
+            })
+        this.hideNewTaskText();
+                //let butt = document.getElementById("newTask");
+                //let text = document.getElementById("text");
+                //let textArea = document.getElementById("textArea");
+                //let sub = document.getElementById("submit");
+                //butt.removeAttribute("style");
+                //text.style.visibility = "hidden";
+                //textArea.style.visibility = "hidden";
+                //sub.style.visibility = "hidden";
+    }
+
+    showNewTaskText() {
+        let butt = document.getElementById("newTask");
+        let name = document.getElementById("text");
+        let desc = document.getElementById("textArea");
+        let sub = document.getElementById("submit");
+        butt.style.display = "none";
+        name.style.visibility = "visible";
+        desc.style.visibility = "visible";
+        sub.style.visibility = "visible";
+    }
+
+    hideNewTaskText() {
+        let butt = document.getElementById("newTask");
+        let text = document.getElementById("text");
+        let textArea = document.getElementById("textArea");
+        let sub = document.getElementById("submit");
+        butt.removeAttribute("style");
+        text.style.visibility = "hidden";
+        text.removeAttribute("value");
+        textArea.style.visibility = "hidden";
+        textArea.removeAttribute("value");
+        sub.style.visibility = "hidden";
     }
 
     renderTasksTable(tasks) {
@@ -52,6 +107,21 @@ export class Home extends Component {
                             </td>
                         </tr>
                         )}
+                        <tr>
+                        <td id="newTask">
+                            <button onClick={() => this.showNewTaskText()}>New Task</button>
+                        </td>
+                        <td id="text" style={{ visibility: 'hidden' }} >
+                                <input type="text" id="1" />
+                            </td>
+                        <td id="textArea" style={{ visibility: 'hidden' }}>
+                            <textarea id="2"></textarea>
+                            </td>
+                        <td id="submit" style={{ visibility: 'hidden' }}>
+                            <button type="submit" onClick={() => this.saveNewTask()}>Submit</button>
+                            </td>
+
+                        </tr>
                 </tbody>
             </table>
             );
