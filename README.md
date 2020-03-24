@@ -1,5 +1,5 @@
 # AmazingToDoApp
-This is a robust, fully functioning ToDo app built on a C# back end with React front end, connected to a SQL server.
+This ~~is~~ will be a robust, fully functioning ToDo app built on a C# back end with React front end, connected to a SQL server.
 
 ## To Run -
 **_Please make sure you have Node.js, NPM, Visual Studio, and the .NET 2.2 SDK installed on your machine._**
